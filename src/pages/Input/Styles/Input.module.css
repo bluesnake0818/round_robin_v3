@@ -1,82 +1,70 @@
+.button {
+  width: 40rem;
+  height: 5rem;
+  font-size: 2rem;
+  color: white;
+  background-color: transparent;
+  border-color: white;
+}
+
+.buttonSection {
+  display: flex;
+  width: '100%';
+  align-items: center;
+  justify-content: center;
+}
+
 .container {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
-.spinner {
-  width: 100%;
+.form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  height: 80rem;
+  width: 80rem;
+  justify-content: space-between;
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-}
-
-/* Install Button */
-/* .buttonArea {
-  min-height: 20vh;
-}
-
-.button {
-  border-style: solid;
-  border-width: 4px;
-  border-radius: 10px;
-  border-color: #ffffff;
-  height: 6rem;
-  font-size: 1.6rem;
-  width: 12rem;
-  background-color: transparent;
-  color: #ffffff;
-  margin: 1px;
+  height: 3rem;
   font-weight: bold;
 }
 
-button:hover {
-  color: black;
-  background-color: #ffffff;
-} */
+.inputSection {
+  height: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
 
-/* Collapsible Section */
-.collapsible {
+.row {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  /* background-color: red; */
+  justify-content: space-around;
 }
 
-.list {
-  list-style: none;
-  padding: 0;
-  border-top: 0.5px solid;
-  border-bottom: 0.5px solid;
-}
-
-.listItem {
-  border-top: 0.5px solid;
-  border-bottom: 0.5px solid;
-  padding: 1.2rem 0;
-}
-
-/* Testimonials */
-.testimonials {
-  margin: 2rem;
-  width: 100%;
+.textInput {
+  /* width: 40rem; */
+  border-radius: 1rem;
+  height: 3rem;
+  padding: 5px;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+  text-align: center;
 }
 
 @media only screen and (min-width: 1024px) {
-  .spinner {
-    width: 100%;
-    min-height: 80vh;
-  }
 
-  .spinnerIMG {
-    width: 50rem;
-    height: 50rem;
-  }
 }
 
-@keyframes rotate {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

@@ -7,12 +7,10 @@ import Output from './pages/Output/Output'
 
 const App = () => {
   return (
-    <>
       <Routes>
         <Route path="/" element={<Input />} />
         <Route path="/output" element={<Output />} />
       </Routes>
-    </>
   )
 }
 
