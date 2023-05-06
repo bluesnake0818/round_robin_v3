@@ -1,0 +1,338 @@
+.landing-spinner-zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: space-between;
+  width: 100%;
+  height: calc(90vh - 24px);
+}
+
+.landing-circle-one,
+.landing-circle-two,
+.landing-circle-three,
+.landing-circle-four,
+.landing-circle-five,
+.landing-circle-six {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 25%;
+  width: 60%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.landing-circle-one {
+  animation: rotate 20s linear infinite;
+}
+
+.landing-circle-two {
+  animation: rotate-two 20s linear infinite;
+}
+
+.landing-circle-three {
+  animation: rotate-three 20s linear infinite;
+}
+
+.landing-circle-four {
+  animation: rotate-four 20s linear infinite;
+}
+
+.landing-circle-five {
+  animation: rotate-five 20s linear infinite;
+}
+
+.landing-circle-six {
+  animation: rotate-six 20s linear infinite;
+}
+
+.landing-rat,
+.landing-ox,
+.landing-tiger,
+.landing-rabbit,
+.landing-dragon,
+.landing-snake,
+.landing-horse,
+.landing-goat,
+.landing-monkey,
+.landing-rooster,
+.landing-dog,
+.landing-pig {
+  width: 3rem;
+  height: 3rem;
+}
+
+.landing-rat,
+.landing-horse {
+  animation: counter-rotate 20s linear infinite;
+}
+
+.landing-ox,
+.landing-goat {
+  animation: counter-rotate-two 20s linear infinite;
+}
+
+.landing-tiger,
+.landing-monkey {
+  animation: counter-rotate-three 20s linear infinite;
+}
+
+.landing-rabbit,
+.landing-rooster {
+  animation: counter-rotate-four 20s linear infinite;
+}
+
+.landing-dragon,
+.landing-dog {
+  animation: counter-rotate-five 20s linear infinite;
+}
+
+.landing-snake,
+.landing-pig {
+  animation: counter-rotate-six 20s linear infinite;
+}
+
+.landing-spinnerTextArea {
+  position: absolute;
+  left: 0;
+  right: 40%;
+  top: 32.5%;
+  width: 100%;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 1;
+}
+
+.landing-spinnerTextArea > div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing-spinnerTextArea > div > h1 {
+  text-align: center;
+  font-size: 1.6rem;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.landing-spinnerTextArea > div > img {
+  width: 10rem;
+}
+
+.landing-spinnerTextArea > div > h3 {
+  text-align: center;
+  font-size: 1em;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.landing-spinnerTextArea > a > .landingInstallBtn {
+  width: 10rem;
+  background-color: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
+  height: 3rem;
+  padding: 0.2rem;
+  margin-top: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.landing-spinnerTextArea > a > .landingInstallBtn:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.title {
+  font-size: 12rem;
+}
+
+@media only screen and (min-width: 1024px) {
+  .landing-spinner-zone {
+    height: 90vh;
+  }
+
+  .landing-circle-one,
+  .landing-circle-two,
+  .landing-circle-three,
+  .landing-circle-four,
+  .landing-circle-five,
+  .landing-circle-six {
+    height: 80%;
+    left: 20%;
+    right: 20%;
+    top: 5%;
+  }
+
+  .landing-rat,
+  .landing-ox,
+  .landing-tiger,
+  .landing-rabbit,
+  .landing-dragon,
+  .landing-snake,
+  .landing-horse,
+  .landing-goat,
+  .landing-monkey,
+  .landing-rooster,
+  .landing-dog,
+  .landing-pig {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .landing-spinnerTextArea {
+    height: 30%;
+    width: 20%;
+    left: 40%;
+    top: 30%;
+    justify-content: space-around;
+  }
+
+  .landing-spinnerTextArea > p {
+    padding-top: 0.4rem;
+  }
+
+  .landing-spinnerTextArea > a > .landingInstallBtn {
+    width: 14rem;
+    background-color: transparent;
+    color: #ffffff;
+    border-color: #ffffff;
+    height: 4rem;
+    padding: 1rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  .landing-spinnerTextArea > a > .landingInstallBtn:hover {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  .landing-spinnerTextArea > div > img {
+    width: 100%;
+  }
+
+  .landing-spinnerTextArea > p {
+    padding-top: 0.4rem;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counter-rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes rotate-two {
+  from {
+    transform: rotate(30deg);
+  }
+  to {
+    transform: rotate(390deg);
+  }
+}
+
+@keyframes counter-rotate-two {
+  from {
+    transform: rotate(-30deg);
+  }
+  to {
+    transform: rotate(-390deg);
+  }
+}
+
+@keyframes rotate-three {
+  from {
+    transform: rotate(60deg);
+  }
+  to {
+    transform: rotate(420deg);
+  }
+}
+
+@keyframes counter-rotate-three {
+  from {
+    transform: rotate(-60deg);
+  }
+  to {
+    transform: rotate(-420deg);
+  }
+}
+
+@keyframes rotate-four {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(450deg);
+  }
+}
+
+@keyframes counter-rotate-four {
+  from {
+    transform: rotate(-90deg);
+  }
+  to {
+    transform: rotate(-450deg);
+  }
+}
+
+@keyframes rotate-five {
+  from {
+    transform: rotate(120deg);
+  }
+  to {
+    transform: rotate(480deg);
+  }
+}
+
+@keyframes counter-rotate-five {
+  from {
+    transform: rotate(-120deg);
+  }
+  to {
+    transform: rotate(-480deg);
+  }
+}
+
+@keyframes rotate-six {
+  from {
+    transform: rotate(150deg);
+  }
+  to {
+    transform: rotate(510deg);
+  }
+}
+
+@keyframes counter-rotate-six {
+  from {
+    transform: rotate(-150deg);
+  }
+  to {
+    transform: rotate(-510deg);
+  }
+}

@@ -1,0 +1,82 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.spinner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Install Button */
+/* .buttonArea {
+  min-height: 20vh;
+}
+
+.button {
+  border-style: solid;
+  border-width: 4px;
+  border-radius: 10px;
+  border-color: #ffffff;
+  height: 6rem;
+  font-size: 1.6rem;
+  width: 12rem;
+  background-color: transparent;
+  color: #ffffff;
+  margin: 1px;
+  font-weight: bold;
+}
+
+button:hover {
+  color: black;
+  background-color: #ffffff;
+} */
+
+/* Collapsible Section */
+.collapsible {
+  width: 100%;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  border-top: 0.5px solid;
+  border-bottom: 0.5px solid;
+}
+
+.listItem {
+  border-top: 0.5px solid;
+  border-bottom: 0.5px solid;
+  padding: 1.2rem 0;
+}
+
+/* Testimonials */
+.testimonials {
+  margin: 2rem;
+  width: 100%;
+}
+
+@media only screen and (min-width: 1024px) {
+  .spinner {
+    width: 100%;
+    min-height: 80vh;
+  }
+
+  .spinnerIMG {
+    width: 50rem;
+    height: 50rem;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
