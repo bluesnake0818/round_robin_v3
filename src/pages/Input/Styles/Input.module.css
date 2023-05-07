@@ -20,6 +20,20 @@
   flex-direction: column;
 }
 
+.data {
+  display: flex;
+  flex-direction: column;
+  width: 40rem;
+  height: 40rem;
+  justify-content: center;
+}
+
+.columnName {
+  background-color: red;
+  display: flex;
+  justify-content: space-around;
+}
+
 .form {
   display: flex;
   flex-direction: column;

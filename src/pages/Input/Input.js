@@ -1,272 +1,196 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './Styles/Input.module.css'
+import 'react-csv-importer/dist/index.css';
+import Papa from 'papaparse'
+import LoadingOverlay from '../../components/UI/LoadingOverlay'
 
 const Input = () => {
-  // const [pidOneData, setPidOneData] = useState({
-  //   pid: 1, 
-  //   arrive: 0, 
-  //   burst: 0
-  // })
-  // const [pidTwoData, setPidTwoData] = useState({
-  //   pid: 2, 
-  //   arrive: 0, 
-  //   burst: 0
-  // })
-  // const [pidThreeData, setPidThreeData] = useState({
-  //   pid: 3, 
-  //   arrive: 0, 
-  //   burst: 0
-  // })
-  // const [pidFourData, setPidFourData] = useState({
-  //   pid: 4, 
-  //   arrive: 0, 
-  //   burst: 0
-  // })
+  // let quantum = 2
   
-  let processes = [
-    {pid: 1, arrivalTime: 0, burstTime: 5},
-    {pid: 2, arrivalTime: 1, burstTime: 7},
-    {pid: 3, arrivalTime: 0, burstTime: 2},
-    {pid: 4, arrivalTime: 2, burstTime: 6},
-  ]
-  let quantum = 0
-  let contextSwitch = 0
-  let readyQueue = []
-  const evaluation = {
-    cpuUtilization: '',
-    troughput: 0,
-    aveWaitTime: 0,
-    aveTurnAroundTime: 0,
+  // let readyQueue = []
+  const [parsedData, setParsedData] = useState([]);
+  const [tableRows, setTableRows] = useState([]);
+  const [values, setValues] = useState([]);
+  const [quantum, setQuantum] = useState(0)
+  const [evaluation, setEvaluation] = useState({
+    totalTime: 0, 
+    numContextSwitch: 0,
+    numProcesses: 0,
+    throughPut: 0,
+    executionOrder: [],
+    avgWaitingTime: 0, 
+    avgTurnAroundTime: 0
+  })
+
+  function handleQuantumChange(event) {
+    setQuantum(event.target.value);
   }
 
-  // a process that was pre-empted goes to the end of the queue
-  // if a process voluntarily releases a CPU (since the job was done before time quantum was up), the next process gets a full time quantum.
-
   function runRoundRobin(processes, quantum) { 
+    if (!processes || !quantum) {
+      alert('need to fill all fileds')
+      return
+    }
+
     let clock = 0;
-    // create a copy of processes array 
     let processesCopy = [...processes]; 
-    
-    // initialise total time to 0 
     let totalTime = 0; 
-    
-    // create an array to output the execution order 
     let executionOrder = []; 
-    
-    // initialise turn around time, waiting time and completion time to 0 
     let turnAroundTime = 0; 
     let waitingTime = 0; 
     let completionTime = 0; 
-    
-    // while loop until all processes are completed 
+    // console.log('processesCopy', processesCopy)
+    // console.log('quantum', quantum)
     while (processesCopy.length > 0) { 
-      // loop through each process 
       for (let i = 0; i < processesCopy.length; i++) { 
-        // if the process has not finished yet 
         if (processesCopy[i].burstTime > 0) { 
-          // if the burst time is greater than the quantum 
-          if (processesCopy[i].burstTime > quantum) { 
-            // increment the total time by quantum 
-            totalTime += quantum; 
-            
-            // decrement the burst time of the process by quantum 
-            processesCopy[i].burstTime -= quantum; 
-            
-            // push the pid of the process to executionOrder array 
+          if (processesCopy[i].burstTime > Number(quantum)) { 
+            totalTime += Number(quantum); 
+            processesCopy[i].burstTime -= Number(quantum); 
             executionOrder.push(processesCopy[i].pid); 
-          } 
-          // if the burst time is less than or equal to the quantum 
+          }
           else { 
-            // increment the total time by burst time 
-            totalTime += processesCopy[i].burstTime; 
-            
-            // set the completion time of the process 
+            totalTime += Number(processesCopy[i].burstTime); 
             completionTime = totalTime; 
-            
-            // calculate the turn around time 
             turnAroundTime += completionTime - processesCopy[i].arrivalTime; 
-            
-            // calculate the waiting time 
             waitingTime += completionTime - processesCopy[i].arrivalTime - processesCopy[i].burstTime; 
-            
-            // push the pid of the process to executionOrder array 
             executionOrder.push(processesCopy[i].pid); 
-            
-            // remove the process from the processes array 
             processesCopy.splice(i, 1); 
           } 
+          console.log('totalTime', totalTime)
         } 
       } 
     } 
-    
-    // calculate the average waiting time 
     let avgWaitingTime = waitingTime / processes.length; 
-    
-    // calculate the average turn around time 
     let avgTurnAroundTime = turnAroundTime / processes.length; 
+    // console.log(waitingTime)
+
+    console.log({
+      totalTime, 
+      numContextSwitch: executionOrder.length - 1,
+      numProcesses: processes.length,
+      throughPut: processes.length / totalTime,
+      executionOrder,
+      avgWaitingTime, 
+      avgTurnAroundTime
+    })
     
     // return the execution order, avg waiting time and avg turn around time 
+
+    setEvaluation({
+      totalTime: totalTime, 
+      numContextSwitch: executionOrder.length - 1,
+      numProcesses: processes.length,
+      throughPut: processes.length / totalTime,
+      executionOrder: executionOrder.toString(),
+      avgWaitingTime: avgWaitingTime, 
+      avgTurnAroundTime: avgTurnAroundTime
+    })
+
     return { 
-      executionOrder, 
+      totalTime, 
+      numContextSwitch: executionOrder.length - 1,
+      numProcesses: processes.length,
+      throughPut: processes.length / totalTime,
+      executionOrder,
       avgWaitingTime, 
-      avgTurnAroundTime 
+      avgTurnAroundTime
     }; 
   }
 
+  const changeHandler = (event) => {
+    // console.log(event.target.files[0])
+    Papa.parse(event.target.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        // console.log(results.data)
+        const rowsArray = [];
+        const valuesArray = [];
+
+        results.data.map((d) => {
+          rowsArray.push(Object.keys(d));
+          valuesArray.push(Object.values(d));
+          setParsedData(results.data);
+          setTableRows(rowsArray[0]);  
+          setValues(valuesArray);
+        });
+      },
+    });
+  };
+
+
+
   return (
     <main className={styles.container}>
+      <input
+        type="file"
+        name="file"
+        accept=".csv"
+        onChange={changeHandler}
+        style={{ display: "block", margin: "10px auto" }}
+      />
+
+      <label className={styles.input}>
+        Time quantum:
+        <input 
+          type="text" 
+          className={styles.textInput} 
+          name="quantum" 
+          onChange={handleQuantumChange}
+          value={quantum}
+        />
+      </label>
+
       <button
         className={styles.button}
-        onClick={runRoundRobin}
+        onClick={() => runRoundRobin(parsedData, quantum)}
       >
         Run
       </button>
-      {/* <form
-        autoComplete="off"
-        // onSubmit={handleSubmit}
-        className={styles.form}
-      >
-        <div className={styles.inputSection}>
-          <div className={styles.row}>
-            <label className={styles.input}>
-              PID
-            </label>
-            <label className={styles.input}>
-              Arrive
-            </label>
-            <label className={styles.input}>
-              Burst
-            </label>
-          </div>
-          <div className={styles.row}>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="location" 
-                // onChange={handleLocationChange}
-                // value={location}
-              />
-            </label>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="numCopies" 
-                // onChange={handleNumCopiesChange}
-                // value={numCopies}
-              />
-            </label >
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="numCopies" 
-                // onChange={handleNumCopiesChange}
-                // value={numCopies}
-              />
-            </label >
-          </div>
-          <div className={styles.row}>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="product" 
-                // onChange={handleProductChange}
-                // value={product}
-              />
-            </label>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="brand" 
-                // onChange={handleBrandChange}
-                // value={brand}
-              />
-            </label>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="price" 
-                // onChange={handlePriceChange}
-                // value={price}
-              />
-            </label>
-          </div>
-          <div className={styles.row}>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="location" 
-                // onChange={handleLocationChange}
-                // value={location}
-              />
-            </label>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="numCopies" 
-                // onChange={handleNumCopiesChange}
-                // value={numCopies}
-              />
-            </label >
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="numCopies" 
-                // onChange={handleNumCopiesChange}
-                // value={numCopies}
-              />
-            </label >
-          </div>
-          <div className={styles.row}>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="location" 
-                // onChange={handleLocationChange}
-                // value={location}
-              />
-            </label>
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="numCopies" 
-                // onChange={handleNumCopiesChange}
-                // value={numCopies}
-              />
-            </label >
-            <label className={styles.input}>
-              <input 
-                type="text" 
-                className={styles.textInput} 
-                // name="numCopies" 
-                // onChange={handleNumCopiesChange}
-                // value={numCopies}
-              />
-            </label >
-          </div>
-        </div>
-        <div className={styles.buttonSection}>
-          <button
-            className={styles.button}
-            // onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        </div>
-      </form> */}
-    </main>
+
+
+      <table>
+        <thead>
+          <tr>
+            {tableRows.map((rows, index) => {
+              return <th key={index}>{rows}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {values.map((value, index) => {
+            return (
+              <tr key={index}>
+                {value.map((val, i) => {
+                  return <td key={i}>{val}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <ul>
+        <li>total execution time: {evaluation.totalTime}</li>
+        <li>number of context switches: {evaluation.numContextSwitch}</li>
+        <li>number of processes: {evaluation.numProcesses}</li>
+        <li>throughput: {evaluation.throughPut}</li>
+        <li>order of execution: {evaluation.executionOrder}</li>
+        <li>average waiting time: {evaluation.avgWaitingTime}</li>
+        <li>average turn-around time: {evaluation.avgTurnAroundTime}</li>
+      </ul>
+    </main> 
   )
 }
 
 export default Input
+
+  // cpuUtilization: 1 - ((context switch time * context switches) / total execution time)
+  // throughput: numProcesses / totalExecTime 
+  // aveWaitTime: totalWaitTime / numProcesses
+  // aveTurnAroundTime: totalExecTime / numProcesses
+
+
+  // a process that was pre-empted goes to the end of the queue
+  // if a process voluntarily releases a CPU (since the job was done before time quantum was up), the next process gets a full time quantum.
